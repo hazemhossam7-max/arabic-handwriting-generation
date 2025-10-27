@@ -1,0 +1,33 @@
+# cGAN Configuration
+model_type: cgan
+batch_size: 32
+num_epochs: 100
+patience: 20
+save_interval: 10
+use_wandb: false
+
+# Model Architecture
+vocab_size: 1000
+image_channels: 1
+image_size: 128
+noise_dim: 100
+text_embed_dim: 256
+text_hidden_dim: 512
+
+# Training Parameters
+g_lr: 2e-4
+d_lr: 2e-4
+beta1: 0.5
+beta2: 0.999
+weight_decay: 1e-5
+
+# Data Parameters
+data_dir: data/raw
+augmentation: true
+normalize: true
+
+# Evaluation
+eval_interval: 5
+save_samples: true
+num_eval_samples: 8
+

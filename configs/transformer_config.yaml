@@ -1,0 +1,35 @@
+# Transformer Configuration
+model_type: transformer
+batch_size: 16
+num_epochs: 100
+patience: 20
+save_interval: 10
+use_wandb: false
+
+# Model Architecture
+vocab_size: 1000
+image_size: 128
+patch_size: 16
+embed_dim: 768
+text_dim: 512
+num_layers: 12
+num_heads: 12
+mlp_ratio: 4
+dropout: 0.1
+
+# Training Parameters
+g_lr: 1e-4
+d_lr: 1e-4
+weight_decay: 0.01
+warmup_steps: 1000
+
+# Data Parameters
+data_dir: data/raw
+augmentation: true
+normalize: true
+
+# Evaluation
+eval_interval: 5
+save_samples: true
+num_eval_samples: 8
+
