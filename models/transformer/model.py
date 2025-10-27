@@ -159,6 +159,9 @@ class TransformerGenerator(nn.Module):
         )
         self.transformer = nn.TransformerEncoder(encoder_layer, num_layers=num_layers)
         
+        # Text to patch projection
+        self.text_to_patch_proj = nn.Linear(text_dim, embed_dim)
+        
         # Output projection
         self.output_proj = nn.Linear(embed_dim, patch_size * patch_size)
         
@@ -179,8 +182,8 @@ class TransformerGenerator(nn.Module):
         text_embedding = self.text_encoder(text_tokens)  # [batch_size, text_dim]
         
         # Project text to patch dimension
-        text_patches = text_embedding.unsqueeze(1).expand(-1, self.n_patches, -1)  # [batch_size, n_patches, embed_dim]
-        text_patches = F.linear(text_patches, self.patch_embedding.projection.weight.view(self.embed_dim, -1).T)
+        text_patches = text_embedding.unsqueeze(1).expand(-1, self.n_patches, -1)  # [batch_size, n_patches, text_dim]
+        text_patches = self.text_to_patch_proj(text_patches)  # [batch_size, n_patches, embed_dim]
         
         # Add noise or use text patches as base
         if noise is not None:
@@ -245,6 +248,22 @@ class TransformerGenerator(nn.Module):
             generated = torch.cat(all_generated, dim=0)
             
         return generated
+    
+    def _tokenize_texts(self, texts: list) -> torch.Tensor:
+        """Simple tokenization (replace with proper Arabic tokenizer)."""
+        # This is a placeholder - in practice, use proper Arabic text tokenization
+        max_length = 50
+        vocab_size = 1000
+        
+        tokenized = []
+        for text in texts:
+            # Simple character-based tokenization
+            tokens = [ord(c) % vocab_size for c in text[:max_length]]
+            # Pad to max_length
+            tokens += [0] * (max_length - len(tokens))
+            tokenized.append(tokens)
+        
+        return torch.tensor(tokenized, dtype=torch.long)
 
 
 class TransformerDiscriminator(nn.Module):

@@ -235,6 +235,22 @@ class CVAE(nn.Module):
         eps = torch.randn_like(std)
         return mu + eps * std
     
+    def _tokenize_texts(self, texts: list) -> torch.Tensor:
+        """Simple tokenization (replace with proper Arabic tokenizer)."""
+        # This is a placeholder - in practice, use proper Arabic text tokenization
+        max_length = 50
+        vocab_size = 1000
+        
+        tokenized = []
+        for text in texts:
+            # Simple character-based tokenization
+            tokens = [ord(c) % vocab_size for c in text[:max_length]]
+            # Pad to max_length
+            tokens += [0] * (max_length - len(tokens))
+            tokenized.append(tokens)
+        
+        return torch.tensor(tokenized, dtype=torch.long)
+    
     def forward(self, image: torch.Tensor, text_tokens: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         """
         Forward pass of CVAE.
